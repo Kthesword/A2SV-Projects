@@ -1,0 +1,154 @@
+/* App.css */
+
+body {
+  font-family: sans-serif;
+  background-color: #7457f6c6;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: rgba(132, 247, 147, 0.632);
+  padding: 5px 3rem 3rem 3rem;
+  border-radius: 10px 50px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  color: #333;
+  font-family: cursive, sans-serif;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 0.8rem;
+  border: 1px solid #cd1b1b;
+  border-radius: 40px;
+}
+
+.input-group button {
+  padding: 0.6rem 1.2rem;
+  background-color: #2d87f0;
+  color: rgb(248, 249, 246);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.input-group button:hover {
+  background-color: #1a6ed8;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-item {
+  color: #f8f7f7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid #0ef4cd;
+  border-radius: 30px;
+  margin-bottom: 0.5rem;
+  background-color: #0359d2;
+  font-family: Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight: 600;
+}
+
+.task-item input[type=\"text\"] {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #bbb;
+  border-radius: 30px;
+  margin-right: 20px;
+}
+
+.button-group button {
+  margin-left: 8px;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+}
+
+.task-item {
+  transition: background-color 0.2s ease;
+}
+
+.task-item:hover {
+  background-color: #2276f5; /* light blue or any color you like */
+}
+
+
+.button-group button:first-child {
+  background-color: #d7ff26;
+  color: rgb(32, 48, 4);
+}
+
+.button-group button:first-child:hover {
+  background-color: #789ae4;
+}
+
+.button-group button:last-child {
+  background-color: #004ffb;
+  color: rgb(236, 63, 63);
+  font-weight: bold;
+}
+
+.button-group button:last-child:hover {
+  background-color: #6d6c6c;
+}
+
+.icon-animate {
+  display: inline-block;
+  animation: bounce 1.5s infinite;
+  margin: 5 10px;
+  padding: 0 30px;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.edit-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.inline-buttons button {
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #eadddd;
+}
+
+.inline-buttons button:hover {
+  color: rgb(122, 237, 122);
+}
+
+.inline-buttons button:last-child:hover {
+  color: red;
+}

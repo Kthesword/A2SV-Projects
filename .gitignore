@@ -1,0 +1,5 @@
+projects/**/node_modules/
+projects/**/.env
+projects/**/.env.local
+projects/**/dist/
+projects/**/build/

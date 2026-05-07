@@ -1,0 +1,230 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .todo-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        #taskInput {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #addTaskBtn {
+            background-color: #28a745;
+            color: white;
+        }
+        #addTaskBtn:hover {
+            background-color: #218838;
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        .task-text {
+            flex: 1;
+            font-size: 16px;
+        }
+        .task-text.completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+        .edit-btn {
+            background-color: #007bff;
+            color: white;
+            margin-right: 5px;
+        }
+        .edit-btn:hover {
+            background-color: #0056b3;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <div class="todo-container">
+        <div class="input-section">
+            <input type="text" id="taskInput" placeholder="Enter a new task">
+            <button id="addTaskBtn">Add Task</button>
+        </div>
+        <div id="taskList"></div>
+    </div>
+
+    <script>
+        // Task array to store todos
+        let tasks = [];
+
+        // DOM elements
+        const taskInput = document.getElementById('taskInput');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const taskList = document.getElementById('taskList');
+
+        // Load tasks from localStorage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTasks = localStorage.getItem('tasks');
+            if (savedTasks) {
+                tasks = JSON.parse(savedTasks);
+                renderTasks();
+            }
+        });
+
+        // Add task event listener
+        addTaskBtn.addEventListener('click', addTask);
+        taskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addTask();
+        });
+
+        // Add task function
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            if (taskText === '') {
+                alert('Please enter a task!');
+                return;
+            }
+
+            const task = {
+                id: Date.now(),
+                text: taskText,
+                completed: false
+            };
+
+            tasks.push(task);
+            saveTasks();
+            renderTasks();
+            taskInput.value = '';
+        }
+
+        // Edit task function
+        function editTask(id) {
+            const task = tasks.find(t => t.id === id);
+            const newText = prompt('Edit task:', task.text);
+            if (newText !== null && newText.trim() !== '') {
+                task.text = newText.trim();
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        // Delete task function
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+            renderTasks();
+        }
+
+        // Toggle task completion
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            task.completed = !task.completed;
+            saveTasks();
+            renderTasks();
+        }
+
+        // Save tasks to localStorage
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        // Render tasks
+        function renderTasks() {
+            taskList.innerHTML = '';
+            tasks.forEach(task => {
+                const taskItem = document.createElement('div');
+                taskItem.className = 'task-item';
+                taskItem.innerHTML = `
+                    <span class="task-text ${task.completed ? 'completed' : ''}" onclick="toggleTask(${task.id})">${task.text}</span>
+                    <div>
+                        <button class="edit-btn" onclick="editTask(${task.id})">Edit</button>
+                        <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+                    </div>
+                `;
+                taskList.appendChild(taskItem);
+            });
+        }
+    </script>
+</body>
+</html>

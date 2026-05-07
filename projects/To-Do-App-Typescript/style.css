@@ -1,0 +1,126 @@
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #08d7b1, #2e51ee);
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Main container */
+.container {
+  background-color: hwb(202 84% 7%);
+  padding: 30px 40px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  align-self: center;
+}
+
+/* Title */
+.container h1 {
+  text-align: center;
+  color: #0a0808;
+  margin-bottom: 20px;
+}
+
+/* Input + Add Button */
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#taskInput {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 16px;
+  border: 2px solid #0f0808;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+#taskInput:focus {
+  outline: none;
+  border-color: #7249f0;
+}
+
+#addBtn {
+  padding: 10px 18px;
+  background-color: #7f5af0;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#addBtn:hover {
+  background-color: #858282;
+}
+
+/* Task List */
+#taskList {
+  list-style: square;
+  padding: 0;
+}
+
+/* Task Item */
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f1f1f1;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+li:hover {
+  background-color: #bcbbbb;
+}
+
+li span {
+  flex: 1;
+  font-size: 16px;
+  color: #3e3c3c;
+}
+
+/* Buttons */
+li button {
+  margin-left: 8px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+li button:first-child {
+  background-color: #066769;
+  color: rgb(240, 231, 231);
+}
+
+li button:first-child:hover {
+  background-color: #2baf34;
+}
+
+li button:last-child {
+  background-color: #5a0502;
+  color: white;
+}
+
+li button:last-child:hover {
+  background-color: #a20601;
+}
